@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Automattic/calypso-pr-checker#readme",
   "dependencies": {
-    "github": "^0.2.4"
+    "async": "^1.5.2",
+    "github": "^0.2.4",
+    "request": "^2.69.0"
   }
 }
