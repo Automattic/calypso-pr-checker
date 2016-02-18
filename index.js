@@ -15,14 +15,40 @@ var API = require( 'github' ),
   mentions = {},
   prs = {};
 
+// authenticate if you run over the rate limit
+//github.authenticate( {
+//  type: 'basic',
+//  username: '$user',
+//  password: '$token'
+//} );
+
 function getOpenPullRequests( cb ) {
-  github.pullRequests.getAll( {
-    user: 'Automattic',
-    repo: 'wp-calypso',
-    state: 'open',
-    page: 1,
-    per_page: 100
-  }, cb );
+  var collectedPRs = [], page = 1;
+  function fetch() {
+    github.pullRequests.getAll( {
+      user: 'Automattic',
+      repo: 'wp-calypso',
+      state: 'open',
+      page: page,
+      per_page: 20
+    }, process );
+  }
+
+  function process( err, prs ) {
+    if ( err ) {
+      cb( err );
+      return;
+    }
+    if ( prs.length === 0 ) {
+      cb( null, collectedPRs );
+      return;
+    }
+    collectedPRs = collectedPRs.concat( prs );
+    page += 1;
+    fetch();
+  }
+
+  fetch();
 }
 
 function fetchAndProcessDiff( pr, cb ) {
