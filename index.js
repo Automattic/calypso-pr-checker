@@ -20,7 +20,7 @@ function getOpenPullRequests( cb ) {
     user: 'Automattic',
     repo: 'wp-calypso',
     state: 'open',
-    page: 2,
+    page: 1,
     per_page: 100
   }, cb );
 }
